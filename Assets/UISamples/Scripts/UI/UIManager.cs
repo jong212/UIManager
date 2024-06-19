@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,12 +6,16 @@ using UnityEngine;
 public enum UIType
 {
     SimplePopup,
+    ConfirmPopup,
     MainUI,
+
 }
+
 
 public class UIManager : MonoBehaviour
 {
     [SerializeField] GameObject UIRoot;
+ 
 
     public static UIManager Instance { get; set; }
 
@@ -28,6 +33,7 @@ public class UIManager : MonoBehaviour
     {
         if (_openedUIDic.Contains(uiType) == false)
         {
+            //OpenUI를 바로 타는 케이스가 있어서 비활성화 되어있는 오브젝트를 활성화 시키고 싶어서
             uiObject.SetActive(true);
             _openedUIDic.Add(uiType);
         }
@@ -74,9 +80,16 @@ public class UIManager : MonoBehaviour
             case UIType.SimplePopup:
                 path = "Prefabs/UI/SimplePopup";
                 break;
+            case UIType.ConfirmPopup:
+                path = "Prefabs/UI/ConfirmPopup";
+                break;
         }
 
         return path;
+    }
+    public void CloseSpecificUI(UIType uiType)
+    {
+        CloseUI(uiType);
     }
 
     public void OpenSimplePopup(string msg)
@@ -93,13 +106,28 @@ public class UIManager : MonoBehaviour
         }
     }
 
-
-
-    public void CloseSpecificUI(UIType uiType)
+    public void OpenConfirmBtn(string msg)
     {
-        CloseUI(uiType);
+        var gObj = GetCreatedUI(UIType.ConfirmPopup);
+
+        if (gObj != null)
+        {
+            OpenUI(UIType.ConfirmPopup, gObj);
+            // _simplePopup.gameObject.SetActive(true); -> OpenUI로 역할 이전
+
+            var ConfirmButton = gObj.GetComponent<ConfirmButton>();
+        }
     }
 
+    public void RegisterOnClickConfirmEvent(bool isRegister, Action callback)
+    {
+        if (_createdUIDic.ContainsKey(UIType.ConfirmPopup))
+        {
+            var gObj = _createdUIDic[UIType.ConfirmPopup];
+            var confirmPopup = gObj.GetComponent<ConfirmButton>();
+            confirmPopup?.RegisterOnClickConfirmEvent(isRegister, callback);
+        }
+    }
 
 
 }

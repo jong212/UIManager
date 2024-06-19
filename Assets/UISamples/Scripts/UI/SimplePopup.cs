@@ -7,12 +7,11 @@ public class SimplePopup : MonoBehaviour
 {
     [SerializeField] Text Text_Msg;
 
-    //WaitForSeconds _waitForSec = new WaitForSeconds(1.5f)
 
     // 기능 확장
     private void OnEnable()
     {
-        StartCoroutine(CoCloseSelf());
+        //StartCoroutine(CoCloseSelf()); 전투버튼 누를 때
     }
 
     public void SetUI(string msg)
@@ -36,7 +35,13 @@ public class SimplePopup : MonoBehaviour
         // 이상한 짓 -> this.gameObject.SetActive(false);
     } 
 
+    // 전면버튼 누를 때
+    public void onClick_Close()
+    {
+        //UIManager.Instance.CloseSpecificUI(UIType.SimplePopup);
+        StartCoroutine(CoCloseSelf());
 
+    }
     // UIBase 만들면 거기에 OnBeforeEnable() //
     // Awake랑 OnEnable가 순서를 보장하지 않는 경우가 있어서
     // 확실하게 OnEnable하기 전에 데이터 관련 처리가 필요한 경우를 위함

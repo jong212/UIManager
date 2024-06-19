@@ -79,7 +79,6 @@ public class UIManager : MonoBehaviour
         return path;
     }
 
-    // Extension이 무조건 MVVM에서만 사용하는건 아님! -> 이따 빼주자
     public void OpenSimplePopup(string msg)
     {
         var gObj = GetCreatedUI(UIType.SimplePopup);
@@ -94,10 +93,13 @@ public class UIManager : MonoBehaviour
         }
     }
 
+
+
     public void CloseSpecificUI(UIType uiType)
     {
         CloseUI(uiType);
     }
+
 
 
 }
